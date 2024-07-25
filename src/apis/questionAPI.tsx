@@ -17,16 +17,26 @@ const getSessionToken = async () => {
     }
 }
 
+const getCategory = async () => {
+    try {
+        const response = await axiosInstance.get('/api_category.php')
+        
+        return response.data.trivia_categories
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 const getQuestions = async ( amount: string, category: string, difficulty: string) => {
     try {
         const token = localStorage.getItem('token')
         const params: getQuestionProps = { amount }
 
-        if (category != "any") {
+        if (category !== "any" && category != '') {
             params.category = category
         }
 
-        if (difficulty != "any") {
+        if (difficulty !== "any" && difficulty != '') {
             params.difficulty = difficulty
         }
 
@@ -40,7 +50,7 @@ const getQuestions = async ( amount: string, category: string, difficulty: strin
 
         const response = await axiosInstance.get(`/api.php`, { params })
         
-        return response.data
+        return response.data.results
     } catch (error) {
         console.error(error)
     }
@@ -48,5 +58,6 @@ const getQuestions = async ( amount: string, category: string, difficulty: strin
 
 export {
     getQuestions,
+    getCategory,
     getSessionToken
 }

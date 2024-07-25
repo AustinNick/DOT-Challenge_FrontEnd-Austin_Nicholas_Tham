@@ -3,9 +3,10 @@ import React, { useState, useEffect } from 'react'
 interface TimerProps {
     duration: number
     onTimeUp: () => void
+    onChange?: () => void
 }
 
-const Timer: React.FC<TimerProps> = ({ duration, onTimeUp }) => {
+const Timer: React.FC<TimerProps> = ({ duration, onTimeUp, onChange }) => {
     const [timeLeft, setTimeLeft] = useState(duration)
 
     useEffect(() => {
@@ -13,12 +14,14 @@ const Timer: React.FC<TimerProps> = ({ duration, onTimeUp }) => {
             onTimeUp()
             return
         }
+
         const timer = setInterval(() => {
             setTimeLeft(timeLeft - 1)
+            if (onChange) onChange()
         }, 1000)
 
         return () => clearInterval(timer)
-    }, [timeLeft, onTimeUp])
+    }, [timeLeft, onTimeUp, onChange])
 
     return (
         <div>
