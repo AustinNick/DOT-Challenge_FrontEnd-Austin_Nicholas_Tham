@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { userData } from "../../constants/userData"
+import { getSessionToken } from "../../apis/questionAPI"
 
 const LoginPage = () => {
     const [username, setUsername] = useState('')
@@ -9,23 +10,27 @@ const LoginPage = () => {
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setError('')
-        // Check if the user exists
+        
         const user = userData.find((u) => u.username === username)
         if (!user) {
             setError('User not found')
             return
         }
 
-        // Check if the password is correct
         if (user.password !== password) {
             setError('Invalid password')
             return
         }
 
-        // Login the user
+        const token = await getSessionToken()
+        if (!token) {
+            setError('Failed to get session token')
+            return
+        }
+
+        localStorage.setItem('token', token)
         localStorage.setItem('user', JSON.stringify(user))
 
-        // Redirect the user to the home page
         window.location.href = '/home'
     }
 

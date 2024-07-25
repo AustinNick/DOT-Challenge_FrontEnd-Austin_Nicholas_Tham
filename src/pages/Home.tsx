@@ -1,24 +1,37 @@
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { user } from '../types/user'
+import { useNavigate } from 'react-router-dom'
 
 interface HomePageProps {
     user?: user | null
 }
 
 const HomePage: React.FC<HomePageProps> = ({ user }) => {
-    const [questionNum, setQuestionNum] = useState<number>(0)
+    const [amount, setAmount] = useState<string>('10')
     const [category, setCategory] = useState<string>('any')
     const [difficulty, setDifficulty] = useState<string>('any')
     const [error, setError] = useState<string>('')
 
+    const navigate = useNavigate();
+
+    useEffect
+
     const handleQuestion = (e: React.FormEvent) => {
         e.preventDefault()
-        if (questionNum < 1) {
+        if (parseInt(amount) < 1) {
             setError('Number of question must be at least 1')
+            
             return
         }
-        console.log(questionNum, category, difficulty)
+
+        navigate('/quiz', {
+            state: {
+                amount,
+                category,
+                difficulty
+            }
+        })
     }
 
     return (
@@ -32,10 +45,11 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
                             Number of Question
                         </label>
                         <input
-                            type="number"
+                            type="string"
+                            inputMode='numeric'
                             id="number_of_question"
-                            value={questionNum}
-                            // onChange={(e) => setQuestionNum(e.target.value)}
+                            value={amount}
+                            onChange={(e) => setAmount(e.target.value)}
                             className="w-full px-3 py-2 border border-gray-300 rounded"
                             required
                         />
