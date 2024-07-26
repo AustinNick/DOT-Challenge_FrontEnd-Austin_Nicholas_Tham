@@ -102,6 +102,8 @@ const QuizPage = () => {
             setCurrentQuestionIndex(currentQuestionIndex + 1)
         } else {
             setQuizCompleted(true)
+            setCurrentQuestionIndex(currentQuestionIndex + 1)
+
             localStorage.removeItem("quizState")
         }
     }
@@ -124,6 +126,7 @@ const QuizPage = () => {
                 state: {
                     correctAnswers,
                     wrongAnswers,
+                    notAnswered: currentQuestionIndex,
                     totalQuestions: questions?.length
                 }
             })
@@ -133,6 +136,7 @@ const QuizPage = () => {
         correctAnswers,
         wrongAnswers,
         questions?.length,
+        currentQuestionIndex,
         navigate,
         finishQuiz
     ])

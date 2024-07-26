@@ -2,7 +2,8 @@ import { Link, useLocation } from "react-router-dom"
 
 const ResultPage = () => {
     const location = useLocation()
-    const { correctAnswers, wrongAnswers, totalQuestions } = location.state
+    const { correctAnswers, wrongAnswers, notAnswered, totalQuestions } =
+        location.state
     const totalScore = (correctAnswers / totalQuestions) * 100
 
     return (
@@ -10,6 +11,8 @@ const ResultPage = () => {
             <h2 className="font-bold text-4xl mb-6">Quiz Results</h2>
             <p>Correct Answers: {correctAnswers}</p>
             <p>Wrong Answers: {wrongAnswers}</p>
+            <p>Answered Questions: {correctAnswers + wrongAnswers}</p>
+            <p>Not Answered Questions: {totalQuestions - notAnswered}</p>
             <p>Total Questions: {totalQuestions}</p>
             <p>Score: {totalScore} / 100</p>
             <Link
