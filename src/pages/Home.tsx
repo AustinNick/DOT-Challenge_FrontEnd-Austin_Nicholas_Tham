@@ -1,20 +1,17 @@
+import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
+import { getCategory } from "./../apis/questionAPI"
+import { Category } from "./../types/question"
+import { useAuthContext } from "./../context/authContext"
 
-import React, { useEffect, useState } from 'react'
-import { user } from '../types/user'
-import { Link } from 'react-router-dom'
-import { getCategory } from '../apis/questionAPI'
-import { Category } from '../types/question'
-
-interface HomePageProps {
-    user?: user | null
-}
-
-const HomePage: React.FC<HomePageProps> = ({ user }) => {
-    const [amount, setAmount] = useState<string>('10')
-    const [category, setCategory] = useState<string>('any')
+const HomePage = () => {
+    const [amount, setAmount] = useState<string>("10")
+    const [category, setCategory] = useState<string>("any")
     const [listCategory, setListCategory] = useState<Category[]>([])
-    const [difficulty, setDifficulty] = useState<string>('any')
-    const [error, setError] = useState<string>('')
+    const [difficulty, setDifficulty] = useState<string>("any")
+    const [error, setError] = useState<string>("")
+
+    const { user, startQuiz } = useAuthContext()
 
     useEffect(() => {
         const fetchCategory = async () => {
@@ -27,22 +24,29 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
 
     const handleQuestion = () => {
         if (parseInt(amount) < 1) {
-            setError('Number of question must be at least 1')
+            setError("Number of question must be at least 1")
         }
+
+        startQuiz()
     }
 
     return (
         <div className="h-full flex items-center justify-center bg-gray-100">
             <div className="bg-white p-6 rounded shadow-md w-full max-w-lg">
-                <h2 className="text-2xl font-bold mb-4">Welcome, {user?.username}!</h2>
+                <h2 className="text-2xl font-bold mb-4">
+                    Welcome, {user?.username}!
+                </h2>
                 {error && <p className="text-red-500 mb-4">{error}</p>}
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="number_of_question">
+                    <label
+                        className="block text-gray-700 text-sm font-bold mb-2"
+                        htmlFor="number_of_question"
+                    >
                         Number of Question
                     </label>
                     <input
                         type="string"
-                        inputMode='numeric'
+                        inputMode="numeric"
                         id="number_of_question"
                         value={amount}
                         onChange={(e) => {
@@ -54,7 +58,10 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
                 </div>
 
                 <div className="mb-6">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="category">
+                    <label
+                        className="block text-gray-700 text-sm font-bold mb-2"
+                        htmlFor="category"
+                    >
                         Category
                     </label>
                     <select
@@ -66,13 +73,18 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
                     >
                         <option value="any">Any Category</option>
                         {listCategory.map((item) => (
-                            <option key={item.id} value={item.id}>{item.name}</option>
+                            <option key={item.id} value={item.id}>
+                                {item.name}
+                            </option>
                         ))}
                     </select>
                 </div>
 
                 <div className="mb-6">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="difficulty">
+                    <label
+                        className="block text-gray-700 text-sm font-bold mb-2"
+                        htmlFor="difficulty"
+                    >
                         Difficulty
                     </label>
                     <select
@@ -92,7 +104,7 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
                 <div className="flex items-center justify-between">
                     <Link
                         onClick={handleQuestion}
-                        to={'/quiz'}
+                        to={"/quiz"}
                         state={{
                             amount,
                             category,

@@ -1,4 +1,4 @@
-import axiosInstance from '../axiosConfig'
+import axiosInstance from '../config/axiosConfig'
 
 export interface getQuestionProps {
     amount?: string
